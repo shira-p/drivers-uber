@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>דרייברים&אובר - הנסיעה שלך, השירות שלנו</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold: #c9a227;
+      --gold-light: #f0c040;
+      --gold-dark: #a07c10;
+      --bg: #0a0908;
+      --card-bg: rgba(20,18,14,0.90);
+      --text: #f5f0e8;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Heebo', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ══ HERO ══ */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: clamp(60px,10vw,100px) clamp(16px,6vw,60px) clamp(40px,8vw,80px);
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+
+
+    /* glowing gold radial behind car */
+    .hero-glow {
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: min(900px, 120vw);
+      height: 50%;
+      background: radial-gradient(ellipse 70% 70% at 50% 100%, rgba(201,162,39,0.09) 0%, transparent 70%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* gold grid overlay */
+    .hero-grid {
+      position: absolute; inset: 0;
+      background:
+        repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(201,162,39,0.022) 39px, rgba(201,162,39,0.022) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(201,162,39,0.022) 39px, rgba(201,162,39,0.022) 40px);
+      z-index: 1; pointer-events: none;
+    }
+
+    .hero > *:not(.hero-car-wrap):not(.hero-grid):not(.hero-glow) { position: relative; z-index: 2; }
+
+    /* headlight pulse */
+    @keyframes hlPulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+    .hl { animation: hlPulse 3s ease-in-out infinite; }
+    @keyframes rlPulse { 0%,100%{opacity:.4} 50%{opacity:.75} }
+    .rl { animation: rlPulse 3s 1s ease-in-out infinite; }
+
+    .hero-title {
+      font-size: clamp(2.4rem, 9vw, 5.8rem);
+      font-weight: 900; color: var(--gold-light);
+      letter-spacing: -1px; line-height: 1.05;
+      text-shadow: 0 0 60px rgba(201,162,39,0.5), 0 2px 8px rgba(0,0,0,0.95);
+      animation: fadeDown .7s ease both;
+    }
+    .hero-sub {
+      margin-top: 12px;
+      font-size: clamp(1rem, 3.5vw, 1.45rem);
+      font-weight: 400; color: rgba(245,240,232,0.88);
+      text-shadow: 0 1px 6px rgba(0,0,0,0.9);
+      animation: fadeDown .7s .15s ease both;
+    }
+    .hero-buttons {
+      margin-top: clamp(32px,6vw,52px);
+      display: flex; flex-direction: column; gap: 14px;
+      width: 100%; max-width: 420px;
+      animation: fadeUp .7s .3s ease both;
+    }
+    .btn-whatsapp {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      padding: clamp(14px,3vw,18px) 28px; border-radius: 50px;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold-dark) 100%);
+      color: #1a1200;
+      font-size: clamp(1rem,3vw,1.15rem); font-weight: 700; font-family: 'Heebo',sans-serif;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 4px 30px rgba(201,162,39,0.45), inset 0 1px 0 rgba(255,255,255,0.15);
+      transition: transform .15s, box-shadow .15s; white-space: nowrap;
+    }
+    .btn-whatsapp:hover { transform: translateY(-2px); box-shadow: 0 8px 42px rgba(201,162,39,0.62); }
+    .btn-whatsapp:active { transform: scale(.97); }
+    .btn-call {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      padding: clamp(12px,2.5vw,15px) 28px; border-radius: 50px;
+      background: transparent; color: var(--gold-light);
+      font-size: clamp(.95rem,2.8vw,1.05rem); font-weight: 600; font-family: 'Heebo',sans-serif;
+      text-decoration: none; border: 2px solid var(--gold); cursor: pointer;
+      transition: background .15s; white-space: nowrap;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+    }
+    .btn-call:hover { background: rgba(201,162,39,0.12); }
+
+    /* ══ FEATURES ══ */
+    .features {
+      padding: clamp(16px,4vw,32px) clamp(12px,4vw,24px) clamp(60px,10vw,100px);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 190px), 1fr));
+      gap: clamp(12px,2.5vw,18px);
+      max-width: 980px; margin: 0 auto; width: 100%;
+    }
+    @media (max-width: 480px) { .features { grid-template-columns: 1fr; } }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(201,162,39,0.18);
+      border-radius: 18px;
+      padding: clamp(22px,4vw,34px) clamp(14px,3vw,24px);
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      backdrop-filter: blur(8px);
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+      animation: fadeUp .6s ease both;
+    }
+    .feature-card:hover { border-color: var(--gold); transform: translateY(-4px); box-shadow: 0 8px 30px rgba(201,162,39,0.18); }
+    .feature-card:nth-child(1){animation-delay:.1s}
+    .feature-card:nth-child(2){animation-delay:.2s}
+    .feature-card:nth-child(3){animation-delay:.3s}
+    .feature-card:nth-child(4){animation-delay:.4s}
+    .feature-card:nth-child(5){animation-delay:.5s}
+
+    .feature-icon { width: clamp(40px,5vw,54px); height: clamp(40px,5vw,54px); color: var(--gold); }
+    .feature-label { font-size: clamp(.95rem,2.5vw,1.15rem); font-weight: 700; }
+
+    .feature-card.female {
+      border-color: rgba(240,192,64,0.5);
+      background: linear-gradient(145deg, rgba(22,18,6,0.96), rgba(32,26,8,0.96));
+      position: relative; overflow: visible;
+    }
+    .feature-card.female::before {
+      content: '✦ חדש';
+      position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+      background: var(--gold-light); color: #1a1200;
+      font-size: 0.65rem; font-weight: 900;
+      padding: 3px 10px; border-radius: 20px;
+      white-space: nowrap; letter-spacing: .5px;
+      box-shadow: 0 2px 10px rgba(201,162,39,0.55);
+    }
+    .female .feature-icon { color: var(--gold-light); }
+    .female .feature-label { color: var(--gold-light); }
+
+    /* ══ FAB ══ */
+    .fab-area { position: fixed; bottom: 20px; left: 16px; display: flex; flex-direction: column; gap: 10px; z-index: 200; }
+    .fab {
+      width: clamp(46px,7vw,54px); height: clamp(46px,7vw,54px);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      text-decoration: none; box-shadow: 0 4px 16px rgba(0,0,0,.5); transition: transform .15s;
+    }
+    .fab:hover { transform: scale(1.1); }
+    .fab-access { background: #2b8ce0; }
+    .fab-wa { background: linear-gradient(135deg, var(--gold-light), var(--gold-dark)); }
+
+    footer { text-align: center; padding: 20px 16px; font-size: clamp(.72rem,2vw,.82rem); color: rgba(245,240,232,0.28); }
+
+    @media (min-width: 768px) {
+      .hero-buttons { flex-direction: row; justify-content: center; max-width: 600px; }
+      .btn-whatsapp, .btn-call { flex: 1; }
+    }
+
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-22px)} to{opacity:1;transform:translateY(0)} }
+    @keyframes fadeUp   { from{opacity:0;transform:translateY(24px)}  to{opacity:1;transform:translateY(0)} }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-grid"></div>
+
+
+        <defs>
+          <!-- body gradient: bright top, fade to dark bottom -->
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.22"/>
+            <stop offset="60%"  stop-color="#ffffff" stop-opacity="0.12"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.0"/>
+          </linearGradient>
+          <!-- roof gradient -->
+          <linearGradient id="roofGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.28"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.10"/>
+          </linearGradient>
+          <!-- window tint -->
+          <linearGradient id="winGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%"   stop-color="#aad4ff" stop-opacity="0.18"/>
+            <stop offset="100%" stop-color="#aad4ff" stop-opacity="0.06"/>
+          </linearGradient>
+          <!-- headlight glow -->
+          <radialGradient id="hlGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#fff6c0" stop-opacity="1"/>
+            <stop offset="60%"  stop-color="#ffe080" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#ffc030" stop-opacity="0"/>
+          </radialGradient>
+          <!-- taillight glow -->
+          <radialGradient id="rlGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#ff6040" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#ff2000" stop-opacity="0"/>
+          </radialGradient>
+          <!-- rim gradient -->
+          <radialGradient id="rimGrad" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#e8d898" stop-opacity="0.9"/>
+            <stop offset="70%"  stop-color="#b89840" stop-opacity="0.7"/>
+            <stop offset="100%" stop-color="#6a5010" stop-opacity="0.5"/>
+          </radialGradient>
+          <!-- chrome beltline -->
+          <linearGradient id="beltGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%"   stop-color="#ffffff" stop-opacity="0"/>
+            <stop offset="20%"  stop-color="#ffffff" stop-opacity="0.5"/>
+            <stop offset="80%"  stop-color="#ffffff" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+          </linearGradient>
+        </defs>
+
+        <!-- ─── BODY ─── -->
+        <!-- main lower body -->
+        <path d="M115 295 Q118 245 150 220 Q185 198 240 182 L330 150
+                 Q390 126 450 118 L660 116
+                 Q730 116 785 136 L880 172
+                 Q950 198 975 230 Q988 252 988 295
+                 L988 322 Q988 330 980 330
+                 L123 330 Q115 330 115 322 Z"
+              fill="url(#bodyGrad)"
+              stroke="rgba(255,255,255,0.18)" stroke-width="1.2"/>
+
+        <!-- roof & cabin -->
+        <path d="M300 183 Q322 132 372 116 L660 114
+                 Q736 114 782 138 L848 183 Z"
+              fill="url(#roofGrad)"
+              stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+
+        <!-- ─── WINDOWS ─── -->
+        <!-- rear quarter window -->
+        <path d="M308 118 L450 116 L450 181 L322 181
+                 Q312 158 316 136 Z"
+              fill="url(#winGrad)"
+              stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+
+        <!-- centre rear-passenger window (long Maybach) -->
+        <path d="M458 116 L635 116 L635 181 L458 181 Z"
+              fill="url(#winGrad)"
+              stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+
+        <!-- windshield -->
+        <path d="M643 116 L760 136 L800 181 L648 181 Z"
+              fill="url(#winGrad)"
+              stroke="rgba(255,255,255,0.14)" stroke-width="1"/>
+
+        <!-- window pillars -->
+        <rect x="449" y="115" width="10" height="67" fill="rgba(255,255,255,0.22)"/>
+        <rect x="635" y="115" width="10" height="67" fill="rgba(255,255,255,0.22)"/>
+
+        <!-- windshield glare streak -->
+        <path d="M658 118 L700 130 L692 178 L652 168 Z"
+              fill="rgba(255,255,255,0.09)"/>
+
+        <!-- ─── CHROME BELTLINE ─── -->
+        <path d="M125 238 Q400 224 550 222 Q720 220 975 232"
+              fill="none" stroke="url(#beltGrad)" stroke-width="2.2" stroke-linecap="round"/>
+
+        <!-- ─── DOOR SEAMS ─── -->
+        <line x1="451" y1="181" x2="451" y2="328" stroke="rgba(255,255,255,0.13)" stroke-width="1.4"/>
+        <line x1="637" y1="181" x2="637" y2="328" stroke="rgba(255,255,255,0.13)" stroke-width="1.4"/>
+
+        <!-- ─── HOOD LINE ─── -->
+        <path d="M645 181 Q800 174 972 208"
+              fill="none" stroke="rgba(255,255,255,0.10)" stroke-width="1.2"/>
+
+        <!-- ─── FRONT GRILLE (tall upright Maybach) ─── -->
+        <path d="M970 215 Q990 224 992 258 L992 295 L970 295 Z"
+              fill="rgba(255,255,255,0.18)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <line x1="972" y1="228" x2="991" y2="232" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/>
+        <line x1="972" y1="241" x2="991" y2="244" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/>
+        <line x1="972" y1="254" x2="991" y2="256" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/>
+        <line x1="972" y1="267" x2="991" y2="268" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/>
+        <line x1="972" y1="280" x2="991" y2="281" stroke="rgba(255,255,255,0.28)" stroke-width="1.2"/>
+
+        <!-- ─── FRONT HEADLIGHT ─── -->
+        <g class="hl">
+          <!-- LED strip -->
+          <path d="M963 200 Q986 205 992 216 L992 222 Q982 212 960 208 Z"
+                fill="rgba(255,240,180,0.85)" stroke="rgba(255,255,200,0.6)" stroke-width="0.8"/>
+          <!-- DRL lower line -->
+          <path d="M912 220 Q948 212 964 215"
+                fill="none" stroke="rgba(255,240,160,0.55)" stroke-width="2" stroke-linecap="round"/>
+          <!-- halo glow blur -->
+          <ellipse cx="985" cy="213" rx="22" ry="12" fill="url(#hlGlow)" opacity="0.7"/>
+        </g>
+
+        <!-- ─── TAIL LIGHT ─── -->
+        <g class="rl">
+          <rect x="114" y="215" width="9" height="42" rx="3"
+                fill="rgba(220,70,30,0.75)" stroke="rgba(255,100,60,0.5)" stroke-width="1"/>
+          <!-- LED bar spread -->
+          <path d="M122 228 Q170 222 210 224"
+                fill="none" stroke="rgba(220,60,20,0.35)" stroke-width="1.5" stroke-linecap="round"/>
+          <ellipse cx="116" cy="235" rx="16" ry="24" fill="url(#rlGlow)" opacity="0.5"/>
+        </g>
+
+        <!-- ─── FRONT BUMPER ─── -->
+        <path d="M958 298 Q992 302 998 322 L962 324 Z"
+              fill="rgba(255,255,255,0.13)" stroke="rgba(255,255,255,0.10)" stroke-width="1"/>
+        <path d="M880 308 Q928 300 958 302 L958 318 Q920 316 876 320 Z"
+              fill="rgba(255,255,255,0.08)"/>
+
+        <!-- ─── REAR BUMPER ─── -->
+        <path d="M124 300 Q104 305 100 322 L128 324 Z"
+              fill="rgba(255,255,255,0.11)"/>
+        <path d="M170 308 Q136 302 122 306 L122 318 Q142 316 175 320 Z"
+              fill="rgba(255,255,255,0.07)"/>
+
+        <!-- ─── EXHAUST ─── -->
+        <ellipse cx="162" cy="325" rx="11" ry="5" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+        <ellipse cx="184" cy="325" rx="11" ry="5" fill="rgba(255,255,255,0.15)" stroke="rgba(255,255,255,0.2)" stroke-width="1"/>
+
+        <!-- ─── HOOD ORNAMENT ─── -->
+        <circle cx="978" cy="186" r="8" fill="none" stroke="rgba(255,255,255,0.45)" stroke-width="1.8"/>
+        <line x1="978" y1="178" x2="978" y2="194" stroke="rgba(255,255,255,0.45)" stroke-width="1.3"/>
+        <line x1="970" y1="186" x2="986" y2="186" stroke="rgba(255,255,255,0.45)" stroke-width="1.3"/>
+        <line x1="972" y1="180" x2="984" y2="192" stroke="rgba(255,255,255,0.3)"  stroke-width="1"/>
+        <line x1="984" y1="180" x2="972" y2="192" stroke="rgba(255,255,255,0.3)"  stroke-width="1"/>
+
+        <!-- ─── ROOF AERIAL ─── -->
+        <line x1="510" y1="114" x2="514" y2="82" stroke="rgba(255,255,255,0.3)" stroke-width="1.6" stroke-linecap="round"/>
+
+        <!-- ─── FRONT WHEEL ─── -->
+        <g>
+          <circle cx="278" cy="330" r="58" fill="#0a0908"/>
+          <circle cx="278" cy="330" r="58" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="6"/>
+          <!-- tyre shine -->
+          <circle cx="278" cy="330" r="58" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12" stroke-dasharray="60 300" stroke-dashoffset="-20"/>
+          <!-- rim -->
+          <circle cx="278" cy="330" r="42" fill="url(#rimGrad)"/>
+          <!-- 10 spokes -->
+          <g stroke="rgba(230,210,140,0.65)" stroke-width="4" stroke-linecap="round">
+            <line x1="278" y1="297" x2="278" y2="315"/>
+            <line x1="278" y1="345" x2="278" y2="363"/>
+            <line x1="245" y1="330" x2="263" y2="330"/>
+            <line x1="293" y1="330" x2="311" y2="330"/>
+            <line x1="255" y1="307" x2="265" y2="317"/>
+            <line x1="291" y1="343" x2="301" y2="353"/>
+            <line x1="301" y1="307" x2="291" y2="317"/>
+            <line x1="265" y1="343" x2="255" y2="353"/>
+            <line x1="248" y1="316" x2="258" y2="323"/>
+            <line x1="298" y1="337" x2="308" y2="344"/>
+          </g>
+          <!-- centre cap -->
+          <circle cx="278" cy="330" r="14" fill="rgba(220,195,120,0.9)"/>
+          <circle cx="278" cy="330" r="7"  fill="rgba(180,150,80,1)"/>
+          <!-- brake caliper hint -->
+          <path d="M248 305 Q238 320 242 338" fill="none" stroke="rgba(255,180,40,0.25)" stroke-width="5" stroke-linecap="round"/>
+        </g>
+
+        <!-- ─── REAR WHEEL ─── -->
+        <g>
+          <circle cx="840" cy="330" r="58" fill="#0a0908"/>
+          <circle cx="840" cy="330" r="58" fill="none" stroke="rgba(255,255,255,0.22)" stroke-width="6"/>
+          <circle cx="840" cy="330" r="58" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="12" stroke-dasharray="60 300" stroke-dashoffset="-20"/>
+          <circle cx="840" cy="330" r="42" fill="url(#rimGrad)"/>
+          <g stroke="rgba(230,210,140,0.65)" stroke-width="4" stroke-linecap="round">
+            <line x1="840" y1="297" x2="840" y2="315"/>
+            <line x1="840" y1="345" x2="840" y2="363"/>
+            <line x1="807" y1="330" x2="825" y2="330"/>
+            <line x1="855" y1="330" x2="873" y2="330"/>
+            <line x1="817" y1="307" x2="827" y2="317"/>
+            <line x1="853" y1="343" x2="863" y2="353"/>
+            <line x1="863" y1="307" x2="853" y2="317"/>
+            <line x1="827" y1="343" x2="817" y2="353"/>
+            <line x1="810" y1="316" x2="820" y2="323"/>
+            <line x1="860" y1="337" x2="870" y2="344"/>
+          </g>
+          <circle cx="840" cy="330" r="14" fill="rgba(220,195,120,0.9)"/>
+          <circle cx="840" cy="330" r="7"  fill="rgba(180,150,80,1)"/>
+          <path d="M810 305 Q800 320 804 338" fill="none" stroke="rgba(255,180,40,0.25)" stroke-width="5" stroke-linecap="round"/>
+        </g>
+
+
+
+    <h1 class="hero-title">דרייברים&amp;אובר</h1>
+    <p class="hero-sub">הנסיעה שלך, השירות שלנו!</p>
+
+    <div class="hero-buttons">
+      <a class="btn-whatsapp"
+         href="https://wa.me/972504477510?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%94%D7%96%D7%9E%D7%99%D7%9F%20%D7%93%D7%A8%D7%99%D7%99%D7%91%D7%A8"
+         target="_blank" rel="noopener">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.554 4.107 1.523 5.834L.057 23.7a.5.5 0 0 0 .61.61l5.867-1.466A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.892 0-3.66-.502-5.19-1.38l-.37-.22-3.483.87.89-3.483-.24-.38A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+        </svg>
+        להזמנת נסיעה בווואטסאפ
+      </a>
+      <a class="btn-call" href="tel:+972504477510">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.07 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
+        </svg>
+        להזמנת נסיעה בשיחה
+      </a>
+    </div>
+  </section>
+
+  <section class="features">
+
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+      <span class="feature-label">זמינות 24/6</span>
+    </div>
+
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/>
+      </svg>
+      <span class="feature-label">רכבי מנהלים VIP</span>
+    </div>
+
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="10" r="3"/>
+        <path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 13 8 13s8-7.75 8-13a8 8 0 0 0-8-8z"/>
+      </svg>
+      <span class="feature-label">נהגים בפריסה ארצית</span>
+    </div>
+
+    <div class="feature-card">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <span class="feature-label">אופציה לרכב 7 מקומות</span>
+    </div>
+
+    <div class="feature-card female">
+      <svg class="feature-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="5"/>
+        <line x1="12" y1="13" x2="12" y2="21"/>
+        <line x1="9"  y1="18" x2="15" y2="18"/>
+      </svg>
+      <span class="feature-label">אפשרות לנהגת</span>
+    </div>
+
+  </section>
+
+  <div class="fab-area">
+    <a class="fab fab-access" href="#" aria-label="נגישות">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="white">
+        <circle cx="12" cy="4" r="2"/>
+        <path d="M19 13h-6l-2-4H7a1 1 0 0 0 0 2h3l2 4h7a1 1 0 0 0 0-2z"/>
+        <path d="M10 17a4 4 0 1 0 8 0 4 4 0 0 0-8 0z"/>
+      </svg>
+    </a>
+    <a class="fab fab-wa"
+       href="https://wa.me/972504477510?text=%D7%A9%D7%9C%D7%95%D7%9D%20%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%94%D7%96%D7%9E%D7%99%D7%9F%20%D7%93%D7%A8%D7%99%D7%99%D7%91%D7%A8"
+       target="_blank" rel="noopener" aria-label="WhatsApp">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="#1a1200">
+        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+        <path d="M12 0C5.373 0 0 5.373 0 12c0 2.117.554 4.107 1.523 5.834L.057 23.7a.5.5 0 0 0 .61.61l5.867-1.466A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.892 0-3.66-.502-5.19-1.38l-.37-.22-3.483.87.89-3.483-.24-.38A9.96 9.96 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+      </svg>
+    </a>
+  </div>
+
+  <footer>© 2026 דרייברים&amp;אובר · כל הזכויות שמורות</footer>
+
+</body>
+</html>
